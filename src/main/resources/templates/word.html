@@ -8,7 +8,7 @@
             font-size: 14.5px;
             font-weight: bold;
             color: #000;
-            background-color: #559e68;
+            background-color: #c4c4c4;
         }
 
         table {
@@ -74,6 +74,10 @@
         body {
             font-family: 思源黑体 Normal;
         }
+
+        .center {
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -126,19 +130,10 @@
                 </tr>
 
                 <th:block th:each="request, c:${table.requestList}">
-                    <tr>
-                        <td align="left" th:text="${c.count} + '.' + ${request.name}"></td>
-                        <td th:text="${request.type}"></td>
-                        <td th:text="${request.paramType}"></td>
-                        <td th:if="${request.require}" th:text="Y"></td>
-                        <td th:if="${!request.require}" th:text="N"></td>
-                        <td th:text="${request.remark}"></td>
-                        <!--                        <td th:if="${request.modelAttr}" th:text="asdfagadfg"></td>-->
-                    </tr>
+
                     <th:block th:if="${request.modelAttr}">
                         <tbody th:include="this::request(${request.modelAttr.properties},${c.count} + '.', 1)"/>
                     </th:block>
-
 
                 </th:block>
 
@@ -180,30 +175,41 @@
     </div>
 </div>
 
-<th:block th:fragment="request(properties,count, lv)">
+<th:block th:fragment="request(properties, count, lv)">
     <th:block th:each="p,c : ${properties}">
         <tr>
-            <td align="left" th:text="${count} + '' + ${c.count} + '.' + ${p.name}"
+            <td align="left" th:text="${p.name}"
                 th:style="|padding-left:${10*lv}px|"></td>
             <td th:text="${p.type}"></td>
-            <td></td>
-            <td th:if="${p.require}" th:text="Y"></td>
-            <td th:if="${!p.require}" th:text="N"></td>
+            <td>body</td>
+            <td th:if="${p.require}" th:text="是"></td>
+            <td th:if="${!p.require}" th:text="否"></td>
             <td th:text="${p.description}"></td>
         </tr>
+        <th:block th:unless="${#lists.isEmpty(p.properties)}">
+            <tr>
+                <td th:class="center" colspan="5" th:text="${p.description}+':'+${p.name}"></td>
+            </tr>
+        </th:block>
         <th:block th:unless="${#lists.isEmpty(p.properties)}"
                   th:include="this::request(${p.properties},${count} + '' + ${c.count} + '.',${lv+1})"/>
     </th:block>
 </th:block>
 
-<th:block th:fragment="response(properties,count, lv)">
+<th:block th:fragment="response(properties, count, lv)">
+
     <th:block th:each="p,c : ${properties}">
         <tr>
-            <td align="left" th:text="${count} + '' + ${c.count} + '.' + ${p.name}"
+            <td align="left" th:text="${p.name}"
                 th:style="|padding-left:${10*lv}px|"></td>
             <td colspan="2" th:text="${p.type}"></td>
             <td colspan="2" th:text="${p.description}"></td>
         </tr>
+        <th:block th:unless="${#lists.isEmpty(p.properties)}">
+            <tr>
+                <td th:class="center" colspan="5" th:text="${p.description}+':'+${p.name}"></td>
+            </tr>
+        </th:block>
         <th:block th:unless="${#lists.isEmpty(p.properties)}"
                   th:include="this::response(${p.properties},${count} + '' + ${c.count} + '.',${lv+1})"/>
     </th:block>
