@@ -522,7 +522,7 @@ public class WordServiceImpl implements WordService {
                 if (modelAttr != null && !CollectionUtils.isEmpty(modelAttr.getProperties())) {
                     Map<String, Object> responseMap = new HashMap<>(8);
                     for (ModelAttr subModelAttr : modelAttr.getProperties()) {
-                        responseMap.put(subModelAttr.getName(), getValue(subModelAttr.getType(), subModelAttr));
+                        responseMap.put(subModelAttr.getName(), getValue(subModelAttr.getName(), subModelAttr.getType(), subModelAttr));
                     }
                     return JsonUtils.writeJsonStr(responseMap);
                 }
@@ -545,7 +545,7 @@ public class WordServiceImpl implements WordService {
             for (Request request : list) {
                 String name = request.getName();
                 String paramType = request.getParamType();
-                Object value = getValue(request.getType(), request.getModelAttr());
+                Object value = getValue(name, request.getType(), request.getModelAttr());
                 switch (paramType) {
                     case "header":
                         headerMap.put(name, value);
@@ -573,10 +573,10 @@ public class WordServiceImpl implements WordService {
         if (!jsonMap.isEmpty()) {
             if (jsonMap.size() == 1) {
                 for (Entry<String, Object> entry : jsonMap.entrySet()) {
-                    res += " -d '" + JsonUtils.writeJsonStr(entry.getValue()) + "'";
+                    res += JsonUtils.writeJsonStr(entry.getValue());
                 }
             } else {
-                res += " -d '" + JsonUtils.writeJsonStr(jsonMap) + "'";
+                res += JsonUtils.writeJsonStr(jsonMap);
             }
         }
         return res;
@@ -589,16 +589,73 @@ public class WordServiceImpl implements WordService {
      * @param modelAttr 引用的类型
      * @return
      */
-    private Object getValue(String type, ModelAttr modelAttr) {
+    private Object getValue(String name, String type, ModelAttr modelAttr) {
         int pos;
         if ((pos = type.indexOf(":")) != -1) {
             type = type.substring(0, pos);
         }
+        if (StringUtils.isNotBlank(name) && name.endsWith("Etime")) {
+            return "2024-09-21 16:59:59";
+        }
+        if (StringUtils.isNotBlank(name) && name.endsWith("Stime")) {
+            return "2024-09-01 08:00:00";
+        }
+        switch (name) {
+            case "appId":
+                return "DS-1044";
+            case "appName":
+                return "配网巡视管理";
+            case "powerSupplyStationOrgId":
+                return "02DC9D99578079E4E053661EDF0AFC25";
+            case "powerSupplyStationOrgName":
+                return "配电运检班";
+            case "countyOrganisationId":
+                return "02DC9D99577779E4E053661EDF0AFC25";
+            case "countyOrganisationName":
+                return "国网湘潭县供电公司";
+            case "cityOrganisationId":
+                return "02DC9D99575779E4E053661EDF0AFC25";
+            case "cityOrganisationName":
+                return "国网湘潭供电公司";
+            case "provinceOrganisationId":
+                return "02DC9D994CE579E4E053661EDF0AFC25";
+            case "provinceOrganisationName":
+                return "国网湖南省电力公司";
+            case "creatorId":
+                return "2200000100017427";
+            case "creatorName":
+                return "某希平";
+            case "dataSourceName":
+                return "PC";
+            case "dataSourceType":
+                return "01";
+            case "astId":
+            case "psrId":
+                return "1cd8b4aead8a5fa6a16e05d65c016e1cd7e9cb5edc";
+            case "psrName":
+                return "NG570319石潭镇鑫源名邸小区";
+            case "psrType":
+                return "0302";
+            case "containerId":
+                return "16DKX-63313";
+            case "containerName":
+                return "石莲线332";
+            case "containerType":
+                return "dkx";
+            case "id":
+                return UUID.randomUUID().toString();
+            case "status":
+                return "000000";
+            case "message":
+                return "调用成功";
+
+            default:
+        }
         switch (type) {
             case "string":
-                return "string";
+                return "";
             case "string(date-time)":
-                return "2020/01/01 00:00:00";
+                return "2024/09/01 08:00:00";
             case "integer":
             case "integer(int64)":
             case "integer(int32)":
@@ -614,16 +671,17 @@ public class WordServiceImpl implements WordService {
                 Map<String, Object> map = new LinkedHashMap<>();
                 if (modelAttr != null && !CollectionUtils.isEmpty(modelAttr.getProperties())) {
                     for (ModelAttr subModelAttr : modelAttr.getProperties()) {
-                        map.put(subModelAttr.getName(), getValue(subModelAttr.getType(), subModelAttr));
+                        map.put(subModelAttr.getName(), getValue(subModelAttr.getName(), subModelAttr.getType(), subModelAttr));
                     }
                 }
                 list.add(map);
                 return list;
             case "object":
+            case "body":
                 map = new LinkedHashMap<>();
                 if (modelAttr != null && !CollectionUtils.isEmpty(modelAttr.getProperties())) {
                     for (ModelAttr subModelAttr : modelAttr.getProperties()) {
-                        map.put(subModelAttr.getName(), getValue(subModelAttr.getType(), subModelAttr));
+                        map.put(subModelAttr.getName(), getValue(subModelAttr.getName(), subModelAttr.getType(), subModelAttr));
                     }
                 }
                 return map;

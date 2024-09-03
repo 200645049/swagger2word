@@ -5,7 +5,7 @@
     <title>toWord</title>
     <style type="text/css">
         .bg {
-            font-size: 14.5px;
+            font-size: 21px;
             font-weight: bold;
             color: #000;
             background-color: #c4c4c4;
@@ -16,11 +16,13 @@
             border-style: solid;
             border-color: black;
             table-layout: fixed;
+            border-collapse: collapse;
         }
 
         tr {
-            height: 32px;
-            font-size: 12px;
+            height: 40px;
+            line-height: 40px;
+            font-size: 21px;
         }
 
         td {
@@ -28,19 +30,24 @@
             border-width: 1px;
             border-style: solid;
             border-color: black;
-            height: 32px;
+            height: 40px;
+            line-height: 40px;
             overflow: hidden;
             word-break: break-all;
             word-wrap: break-word;
-            font-size: 14.5px;
+            font-size: 21px;
         }
 
         .bg td {
-            font-size: 14.5px;
+            font-size: 21px;
+            height: 40px;
+            line-height: 40px;
         }
 
         tr td {
-            font-size: 14.5px;
+            font-size: 21px;
+            height: 40px;
+            line-height: 40px;
         }
 
         .specialHeight {
@@ -52,18 +59,18 @@
             line-height: 60px;
             margin: 0;
             font-weight: bold;
-            font-size: 21px;
+            font-size: 37px;
         }
 
         .second_title {
             height: 40px;
             line-height: 40px;
             margin: 0;
-            font-size: 18.5px;
+            font-size: 29px;
         }
 
         .doc_title {
-            font-size: 42.5px;
+            font-size: 45px;
             text-align: center;
         }
 
@@ -72,7 +79,7 @@
         }
 
         body {
-            font-family: 思源黑体 Normal;
+            font-family: 宋体;
         }
 
         .center {
@@ -94,7 +101,7 @@
         <div th:each="table,tableStat:${tableMap.value}">
 
             <!--这个是每个请求的说明，方便生成文档后进行整理-->
-            <h5 class="second_title" th:text="${tableStat.count} + '）' + ${table.tag}"></h5>
+            <h5 class="second_title" th:text="${table.tag}"></h5>
 
             <table border="1" cellspacing="0" cellpadding="0" width="100%">
                 <tr class="bg">
